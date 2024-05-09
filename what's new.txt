@@ -1,0 +1,206 @@
+***********************************************************************************************************************
+WebdriverListener =>
+- Add WebdriverListener.java(template). [its implements WebDriverEventListener to track each events]
+- TestBase.java update.
+- Also Fail case Screenshot feature added in webdriverListener.java and its screenshot function added in TestUtil.java.
+***********************************************************************************************************************
+ExtendReport =>
+- Add ExtendReport dependency in pom.xml.
+- Add ExtentReporterNG.java(template). [its  implements IReporter, IReporter available inside TestNG]
+- Add Listener entry in TestNG.xml file, with ExtentReporterNG file path.
+    <listeners>
+		<listener class-name="com.qa.demo.listeners.ExtentReporterNG" />
+	</listeners>
+- Reports are generated in 'test-output/ExtendReport.html' [file name in ExtentReporterNG.java file]
+- Run TestNG.xml
+***********************************************************************************************************************
+Allure Report Setup=>
+- Add allure dependency in pom.xml.
+- Add plug-in 'aspectjweaver' and add its dependency inside plug-in section pom.xml
+- Add in code at @Test level in TestCase files.[LoginPageTest_AllureReport.java]
+- Add code on Page Class.[LoginPage.java]
+- Add/generate Testng.xml for @Test file.[TestNG_Allure.xml]
+- Add Testng.xml entry in pom.xml
+	<suiteXmlFiles>
+		<suiteXmlFile>LoginPageTest_AllureReport.xml</suiteXmlFile>
+	</suiteXmlFiles>
+- Run it from pom.xml maven>Test
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Allure Report View =>
+1. After set code in POM.xml, eg(testcase.java, page.java) run following commands in Open project folder in 'powerShell'
+   a.	Set-ExecutionPolicy RemoteSigned -scope CurrentUser
+   b.	iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+   c.	scoop install allure
+2. run following commands >
+   a.	mvn clean install
+   --- OR ---
+   a.	mvn clean test
+3. and to generate allure report run following command from project folder> 
+   a.	allure serve allure-results
+   --- OR ---
+   a.	allure serve
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Allure Report Screenshot =>
+- Add TestAllureListener.java
+- Update BasePage.java for Allure screenshot.
+- Add '@Listeners(TestAllureListener.class)' in TestCase and base file.
+- Add <listener> Entry  in TestNG.xml file, with TestAllureListener file path.
+- Add TestNG.xml entry in pom.xml in <suiteXmlFile>
+***********************************************************************************************************************
+Retry Logic =>
+- Add RetryAnalyzer.java
+- It implements 'testng.IRetryAnalyzer'.
+- It check testcase and if its fail then 'RetryAnalyzer' re-run for a number of times.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If we have limited @test
+- Add testcase file with @test (which want to retry). 
+@Test(priority = 1, retryAnalyzer = com.qa.demo.analyzer.RetryAnalyzer.class)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If we have large number of @test 
+- Add MyTransformer.java
+- Use IAnnotationTransformer
+- Add <listener> Entry  in TestNG.xml file, for RetryAnalyzer.java file, and no need to change in any testcase or page file. 
+***********************************************************************************************************************
+Log4j =>
+- Add log4j dependency in pom.xml.
+- Add 'log4j.properties'.
+- Add "PropertyConfigurator.configure()"
+- Add "Logger log = Logger.getLogger([classnameHere].class);" at file in which use log().
+- Note: commenting "WebEventListener" in BasePage.java to view log4j's logs.
+
+//What is log? : capturing info/activities at the time of program execution. 
+	// types of logs:
+		//1. info
+		//2. warn
+		//3. debug
+		//4. fatal
+	//how to generate the logs? : use Apache log4j API (log4j jar)
+	//How it works? : it reads log 4j configuration from log4j.properties file
+	//where to create: create inside resources folder
+***********************************************************************************************************************
+Jenkins =>
+- Install all suggested plug-in.
+	-> jenkin dashboard > new items [Item Name] > Maven Project > OK
+		> {General Tab} [Project Name] 
+		> {Source Code management} if GIt >
+		> {Build} Manen Configuration > select Maven version.
+			[root pom] pom.xml path, [goals & options] 'clean install' 
+		> {Post build action} [publish Testng Results]
+		> {Save}
+			 
+plug-in list >
+Ant Plugin
+Apache HttpComponents Client 4.x API Plugin
+Backup plugin
+Bootstrap 5 API
+bouncycastle API Plugin
+Branch API Plugin
+Build Timeout
+Caffeine API Plugin
+Checks API plugin
+CloudBees AWS Credentials Plugin
+Command Agent Launcher Plugin
+Config File Provider Plugin
+Credentials
+Credentials Binding Plugin
+Display URL API
+Durable Task Plugin
+ECharts API Plugin
+Email Extension Plugin
+Extensible Choice Parameter plugin
+External Monitor Job Type Plugin
+Folders Plugin
+Font Awesome API Plugin
+Git
+Git client plugin
+GitHub API Plugin
+GitHub Branch Source
+GitHub plugin
+Gradle Plugin
+Jackson 2 API Plugin
+Jakarta Activation API
+Jakarta Mail API
+Java JSON Web Token (JJWT) Plugin
+JavaBeans Activation Framework (JAF) API
+Javadoc Plugin
+JavaMail API
+JavaScript GUI Lib: ACE Editor bundle plugin
+JavaScript GUI Lib: Handlebars bundle plugin
+JavaScript GUI Lib: Moment.js bundle plugin
+JAXB plugin
+Jersey 2 API
+JQuery3 API Plugin
+JSch dependency plugin
+JUnit Plugin
+LDAP Plugin
+Mailer Plugin
+Matrix Authorization Strategy Plugin
+Matrix Project Plugin
+Maven Artifact ChoiceListProvider (Nexus)
+Maven Dependency Update Trigger
+Maven Info Plugin
+Maven Integration plugin
+Maven Invoker plugin
+Maven Metadata Plugin for Jenkins CI server
+Maven Release Plug-in Plug-in
+Maven Repository Scheduled Cleanup Plugin
+Mina SSHD API :: Common
+Mina SSHD API :: Core
+NodeJS Plugin
+OkHttp Plugin
+Oracle Java SE Development Kit Installer Plugin
+OWASP Markup Formatter Plugin
+PAM Authentication plugin
+Pipeline
+Pipeline Graph Analysis Plugin
+Pipeline: API
+Pipeline: Basic Steps
+Pipeline: Build Step
+Pipeline: Declarative
+Pipeline: Declarative Extension Points API
+Pipeline: GitHub Groovy Libraries
+Pipeline: Groovy
+Pipeline: Groovy Libraries
+Pipeline: Input Step
+Pipeline: Job
+Pipeline: Milestone Step
+Pipeline: Model API
+Pipeline: Multibranch
+Pipeline: Nodes and Processes
+Pipeline: REST API Plugin
+Pipeline: SCM Step
+Pipeline: Stage Step
+Pipeline: Stage Tags Metadata
+Pipeline: Stage View Plugin
+Pipeline: Step API
+Pipeline: Supporting APIs
+Plain Credentials Plugin
+Plugin Utilities API Plugin
+Popper.js 2 API Plugin
+Resource Disposer
+SCM API Plugin
+Script Security Plugin
+SnakeYAML API
+SSH Build Agents plugin
+SSH Credentials
+SSH server
+Structs Plugin
+TestNG Results Plugin
+Timestamper
+Token Macro Plugin
+Trilead API Plugin
+Unleash Maven Plugin
+Variant Plugin
+WMI Windows Agents Plugin
+Workspace Cleanup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+===========================================================
+
+Miscellaneous
+- Clean the project with Eclipse and Maven.
+maven command 
+mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testng.xml
